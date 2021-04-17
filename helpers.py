@@ -60,19 +60,21 @@ def make_data(N, num_landmarks, world_size, measurement_range, motion_noise,
     complete = False
 
     while not complete:
-
+        # print('in while')
         data = []
 
         # make robot and landmarks
         r = robot(world_size, measurement_range, motion_noise, measurement_noise)
+        # print(r)
         r.make_landmarks(num_landmarks)
+        # print('landmakr created')
         seen = [False for row in range(num_landmarks)]
     
         # guess an initial motion
         orientation = random.random() * 2.0 * pi
         dx = cos(orientation) * distance
         dy = sin(orientation) * distance
-    
+        # print('orientation initialized')
         for k in range(N-1):
     
             # collect sensor measurements in a list, Z
@@ -80,6 +82,7 @@ def make_data(N, num_landmarks, world_size, measurement_range, motion_noise,
 
             # check off all landmarks that were observed 
             for i in range(len(Z)):
+                # print(k,' ',i)
                 seen[Z[i][0]] = True
     
             # move
@@ -93,6 +96,7 @@ def make_data(N, num_landmarks, world_size, measurement_range, motion_noise,
             data.append([Z, [dx, dy]])
 
         # we are done when all landmarks were observed; otherwise re-run
+        # print(sum(seen),' = ',num_landmarks,' ?')
         complete = (sum(seen) == num_landmarks)
 
     print(' ')
