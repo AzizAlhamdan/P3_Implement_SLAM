@@ -92,11 +92,13 @@ class robot:
         
         ## TODO: return the final, complete list of measurements
         for idx,(dx,dy) in enumerate(self.landmarks):
-            rand_nose = self.rand()
-            dx += rand_nose * self.measurement_noise
-            dy += rand_nose * self.measurement_noise
+            dx -= self.x
+            dx += self.rand() * self.measurement_noise
+            
+            dy -= self.y
+            dy += self.rand() * self.measurement_noise
 
-            if all([dx <= self.measurement_range, dy <= self.measurement_range]):
+            if all([abs(dx) <= self.measurement_range, abs(dy) <= self.measurement_range]):
                 measurements.append([idx, dx, dy])
         return measurements
 
